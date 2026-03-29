@@ -1,0 +1,62 @@
+/* ===== COMPLETE RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== FONT TOKENS ===== */
+:root {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Jost", sans-serif;
+  --font-script: "Great Vibes", cursive;
+}
+
+/* ===== ROOT ELEMENT - FULL SCREEN ===== */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ===== BODY STYLES ===== */
+body {
+  font-family: var(--font-body);
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ===== APP CONTAINER ===== */
+.app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  width: 100%;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.full-screen {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}

@@ -1,0 +1,288 @@
+// ── NAVBAR ──
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+// ── CONTAINER ──
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100vw;
+  height: 50px;
+  margin: 1rem 2rem;
+
+  @media (max-width: 1200px) {
+    padding: 1.5rem 3rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 2rem;
+  }
+}
+
+// ── LOGO ──
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.5rem;
+
+  img {
+    height: 140px;
+    width: auto;
+    transition: all 0.3s ease;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(40%) sepia(30%) saturate(500%)
+      hue-rotate(340deg);
+
+    .navbar.scrolled & {
+      filter: brightness(0) saturate(100%) invert(40%) sepia(30%) saturate(500%)
+        hue-rotate(340deg);
+    }
+
+    @media (max-width: 1200px) {
+      height: 90px;
+    }
+    @media (max-width: 992px) {
+      height: 80px;
+    }
+    @media (max-width: 768px) and (orientation: landscape) {
+      height: 60px;
+    }
+    @media (max-width: 768px) and (orientation: portrait) {
+      height: 70px;
+    }
+    @media (max-width: 480px) {
+      height: 50px;
+    }
+    @media (max-width: 360px) {
+      height: 40px;
+    }
+    @media (max-width: 320px) {
+      height: 35px;
+    }
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+// ── DESKTOP MENU ──
+.desktop-menu {
+  display: flex;
+  gap: 1.5rem;
+
+  .nav-link {
+    text-decoration: none;
+    color: #9d6b53;
+    font-weight: 300;
+    font-size: clamp(1rem, 5vw, 1.2rem);
+    transition: color 0.3s ease;
+    position: relative; // needed for ::after
+
+    &:hover {
+      color: #774936;
+    }
+
+    // ── Active indicator — small dot to the left of the link ──
+    &.active {
+      color: #774936;
+      font-weight: 600;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: -0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #9d6b53;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+    }
+
+    // Keep the pseudo-element reserved on non-active so layout doesn't shift
+    &:not(.active)::after {
+      content: "";
+      position: absolute;
+      left: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: #9d6b53;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  }
+}
+
+// ── HAMBURGER ──
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
+
+  span {
+    width: 25px;
+    height: 2px;
+    background: #9d6b53;
+    border-radius: 2px;
+    display: block;
+    transform-origin: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  .desktop-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 1rem;
+  }
+  .navbar-logo img {
+    height: 90px;
+  }
+}
+
+// ── MOBILE DROPDOWN ──
+.mobile-dropdown {
+  display: none; // GSAP toggles to flex
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ada495;
+  border-top: 1px solid rgba(157, 107, 83, 0.25);
+  border-bottom: 1px solid rgba(157, 107, 83, 0.25);
+  padding: 0.5rem 0;
+  z-index: 998;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(../assets/cement-texture.jpg);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 2rem;
+  text-decoration: none;
+  color: #9d6b53;
+  border-bottom: 1px solid rgba(157, 107, 83, 0.1);
+  position: relative;
+  transition: padding-left 0.3s cubic-bezier(0.65, 0.01, 0.05, 0.99);
+
+  // Hover sweep
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(157, 107, 83, 0.08);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.65, 0.01, 0.05, 0.99);
+  }
+
+  // ── Active indicator — vertical bar on the left edge ──
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background-color: #9d6b53;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s cubic-bezier(0.65, 0.01, 0.05, 0.99);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover,
+  &.active {
+    padding-left: 2.5rem;
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .dropdown-label {
+      font-style: italic;
+    }
+  }
+
+  // Active-only: reveal the bar
+  &.active {
+    &::after {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    .dropdown-index {
+      opacity: 0.7;
+    }
+  }
+}
+
+.dropdown-index {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: #9d6b53;
+  opacity: 0.35;
+  min-width: 1.5rem;
+  transition: opacity 0.2s ease;
+}
+
+.dropdown-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #9d6b53;
+  letter-spacing: 0.05em;
+  transition: font-style 0.2s ease;
+}
+
+// Remove old mobile menu
+.mobile-menu {
+  display: none;
+}
