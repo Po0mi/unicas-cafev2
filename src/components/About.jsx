@@ -1,5 +1,6 @@
 import coffeeImage from "../assets/Coffee.png";
 import "./About.scss";
+import useAboutAnimation from "../hooks/useAboutAnimation";
 
 const BLOCKS = [
   {
@@ -34,18 +35,21 @@ const BLOCKS = [
 ];
 
 const About = () => {
+  const { sectionRef, metaRef, titleRef, blocksRef, imageRef, bodyRef } =
+    useAboutAnimation();
+
   return (
-    <section className="about" id="about">
+    <section className="about" id="about" ref={sectionRef}>
       <div className="about-container">
         {/* ── Meta ── */}
-        <div className="about-meta">
+        <div className="about-meta" ref={metaRef}>
           <span className="about-meta-tag">Our Story</span>
           <span className="about-meta-divider">·</span>
           <span className="about-meta-tag">Est. 2026</span>
         </div>
 
         {/* ── Title ── */}
-        <h2 className="about-title">
+        <h2 className="about-title" ref={titleRef}>
           More than <em>just coffee.</em>
         </h2>
 
@@ -53,6 +57,7 @@ const About = () => {
         {BLOCKS.map((b, i) => (
           <div
             key={i}
+            ref={(el) => (blocksRef.current[i] = el)}
             className={`about-block about-block--${b.side} about-block--${i < 2 ? "top" : "bottom"}`}
           >
             <span className="block-num">{b.num}</span>
@@ -71,6 +76,7 @@ const About = () => {
         {/* ── Center image ── */}
         <div className="about-image-wrapper">
           <img
+            ref={imageRef}
             src={coffeeImage}
             alt="Unica's Cafe iced coffee"
             className="about-image"
@@ -81,7 +87,7 @@ const About = () => {
         </div>
 
         {/* ── Bottom body text ── */}
-        <div className="about-body">
+        <div className="about-body" ref={bodyRef}>
           <p>
             With a welcoming atmosphere and a focus on quality and consistency,
             Unica's Cafe aims to be a place where locals can relax, connect, and

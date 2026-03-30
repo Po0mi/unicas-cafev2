@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
+import useHeroAnimation from "../hooks/useHeroAnimation.js";
 import "./Hero.scss";
 import heroBg from "../assets/heroBg.mp4";
 
-// ── Open/Closed badge — checks Philippine time (UTC+8), open 11AM–7PM ─────────
-const OpenBadge = () => {
+const OpenBadge = ({ badgeRef }) => {
   const getStatus = () => {
     const now = new Date();
     const ph = new Date(
@@ -28,7 +28,10 @@ const OpenBadge = () => {
   }, []);
 
   return (
-    <div className={`open-badge ${status.isOpen ? "is-open" : "is-closed"}`}>
+    <div
+      className={`open-badge ${status.isOpen ? "is-open" : "is-closed"}`}
+      ref={badgeRef}
+    >
       <span className="badge-dot" />
       <span className="badge-text">
         {status.isOpen ? `Open now · Closes 7PM` : `Closed · Opens 11AM`}
@@ -39,38 +42,50 @@ const OpenBadge = () => {
 };
 
 const Hero = () => {
+  const {
+    videoRef,
+    overlayRef,
+    metaRef,
+    subtitleRef,
+    titleRef,
+    badgeRef,
+    ctaRef,
+  } = useHeroAnimation();
+
   return (
     <section className="hero" id="home">
       <div className="hero-container">
-        {/* ── Video ── */}
-        <video autoPlay muted loop playsInline className="hero-video">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="hero-video"
+          ref={videoRef}
+        >
           <source src={heroBg} type="video/mp4" />
         </video>
 
-        {/* ── Gradient overlay ── */}
-        <div className="hero-overlay" />
+        <div className="hero-overlay" ref={overlayRef} />
 
-        {/* ── Top meta row ── */}
-        <div className="hero-meta">
+        <div className="hero-meta" ref={metaRef}>
           <span className="hero-meta-tag">Est. 2026</span>
           <span className="hero-meta-divider">·</span>
           <span className="hero-meta-tag">Cabatuan, Iloilo</span>
         </div>
 
-        {/* ── Subtitle — anchored left ── */}
-        <p className="hero-subtitle">
+        <p className="hero-subtitle" ref={subtitleRef}>
           Experience the finest coffee and pastries in town.
         </p>
 
-        {/* ── Main title — Cafe in italic em ── */}
-        <h1 className="hero-title">
+        <h1 className="hero-title" ref={titleRef}>
           Unicas <br className="title-break" />
           <em>Cafe</em>
         </h1>
 
-        {/* ── Open now badge ── */}
-        <OpenBadge />
-        <div className="hero-cta">
+        <OpenBadge badgeRef={badgeRef} />
+
+        <div className="hero-cta" ref={ctaRef}>
           <a href="#menu" className="cta-btn">
             Explore Menu
           </a>
