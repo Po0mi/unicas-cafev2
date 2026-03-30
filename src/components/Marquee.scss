@@ -13,7 +13,7 @@ $ink: #0a0908;
 .marquee-content {
   display: inline-flex;
   white-space: nowrap;
-  animation: scroll 10s linear infinite;
+  animation: scroll 15s linear infinite;
 
   span {
     font-family: var(--font-body);
