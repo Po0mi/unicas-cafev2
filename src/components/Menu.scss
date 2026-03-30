@@ -1,0 +1,238 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// UNICA'S CAFÉ — Menu Section (Layout E)
+// Cream background · accordion categories · two-column items
+// ─────────────────────────────────────────────────────────────────────────────
+
+$cream: #e6dfd4;
+$cream-lt: #f0ebe3;
+$brown: #9d6b53;
+$ink: #0a0908;
+$ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
+
+// ── Shell ─────────────────────────────────────────────────────────────────────
+.menu-section {
+  width: 100vw;
+  min-height: 100vh;
+  background: $cream;
+  border-bottom: 1px solid rgba($brown, 0.4);
+}
+
+.menu-inner {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: clamp(4rem, 8vh, 7rem) clamp(1.5rem, 5vw, 4rem);
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.menu-head {
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  align-items: center;
+  justify-items: center;
+}
+
+.menu-tag {
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(0.6rem, 0.7vw, 0.68rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba($brown, 0.55);
+  margin-bottom: 0.5rem;
+}
+
+.menu-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 800;
+  color: $ink;
+  line-height: 0.95;
+  margin-bottom: 0.5rem;
+
+  em {
+    font-style: italic;
+    color: rgba($brown, 0.85);
+  }
+}
+
+.menu-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+  font-weight: 300;
+  color: rgba($ink, 0.4);
+  letter-spacing: 0.04em;
+}
+
+// ── Accordion wrapper ─────────────────────────────────────────────────────────
+.menu-accord {
+  border-top: 1px solid rgba($brown, 0.15);
+}
+
+// ── Accordion item ────────────────────────────────────────────────────────────
+.accord-cat {
+  border-bottom: 1px solid rgba($brown, 0.15);
+}
+
+.accord-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: left;
+}
+
+.accord-head-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.accord-num {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 800;
+  color: rgba($brown, 0.3);
+  line-height: 1;
+  min-width: 2.5rem;
+  transition: color 0.3s ease;
+
+  .accord-cat.is-open & {
+    color: rgba($brown, 0.25);
+  }
+}
+
+.accord-name {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 700;
+  color: $ink;
+  transition: color 0.2s ease;
+
+  .accord-cat.is-open & {
+    color: rgba($brown, 0.9);
+  }
+}
+
+.accord-head-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.accord-note {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: rgba($brown, 1);
+  text-transform: uppercase;
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.accord-count {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba($ink, 0.4);
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.accord-chevron {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba($brown, 0.5);
+  line-height: 1;
+  width: 1.2rem;
+  text-align: center;
+  transition: color 0.2s ease;
+
+  .accord-cat.is-open & {
+    color: rgba($brown, 0.85);
+  }
+}
+
+// ── Accordion body ────────────────────────────────────────────────────────────
+.accord-body {
+  overflow: hidden;
+  padding-bottom: 1rem;
+}
+
+// ── Items two-column grid ─────────────────────────────────────────────────────
+.accord-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 3rem;
+  padding: 0.5rem 0 0 calc(2.5rem + 1.25rem); // align under name
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    padding-left: 0;
+  }
+}
+
+.accord-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba($brown, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.accord-row-name {
+  font-family: var(--font-display);
+  font-size: clamp(0.78rem, 0.95vw, 0.88rem);
+  font-weight: 700;
+  color: $ink;
+  padding-right: 0.75rem;
+}
+
+.accord-row-price {
+  font-family: var(--font-display);
+  font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+  font-weight: 700;
+  color: rgba($brown, 0.8);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+// ── Sub-sections (Croffles Classic / Premium, Add Ons) ────────────────────────
+.accord-section {
+  padding-left: calc(2.5rem + 1.25rem);
+  margin-top: 1rem;
+
+  @media (max-width: 600px) {
+    padding-left: 0;
+  }
+}
+
+.accord-section-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba($brown, 0.5);
+  border-top: 1px solid rgba($brown, 0.1);
+  padding-top: 0.6rem;
+  margin-bottom: 0.25rem;
+}

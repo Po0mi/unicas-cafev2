@@ -107,6 +107,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
+  margin-top: 0.4rem;
 
   .is-open & {
     background: #4caf82;
@@ -115,6 +116,9 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 
   .is-closed & {
     background: rgba($cream, 0.2);
+  }
+  @media (max-width: 480px) {
+    margin-top: 0.2rem;
   }
 }
 
@@ -128,7 +132,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
     color: rgba(#4caf82, 0.9);
   }
   .is-closed & {
-    color: rgba($cream, 0.3);
+    color: rgba($cream, 0.4);
   }
 }
 
@@ -178,7 +182,6 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 }
 
 // ── Main title ────────────────────────────────────────────────────────────────
-// Single clamp handles all sizes — vw scales naturally with viewport
 .hero-title {
   grid-area: 3 / 1 / 4 / 8;
   font-family: var(--font-display);
@@ -191,7 +194,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 
   em {
     font-style: italic;
-    color: rgba($brown, 0.9);
+    color: rgba($brown, 1);
   }
 
   .title-break {
@@ -215,7 +218,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
     font-size: clamp(3rem, 16.5vw, 16.5rem);
   }
   @media (max-width: 480px) {
-    font-size: clamp(2.5rem, 22vw, 22rem);
+    font-size: clamp(2.5rem, 25vw, 25rem);
     text-align: center;
   }
 }
@@ -228,7 +231,6 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding-top: 0.5rem;
   z-index: 2;
   padding-left: 8rem;
 
@@ -280,7 +282,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   }
 
   @media (max-width: 480px) {
-    font-size: clamp(1.5rem, 8vw, 3rem);
+    font-size: clamp(1.5rem, 8vw, 1rem);
   }
   @media (min-width: 1280px) and (max-width: 1439px) {
     font-size: clamp(1.8rem, 4vw, 4rem);
@@ -289,7 +291,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 // Secondary — quiet spaced caps
 .cta-link {
   font-family: var(--font-body);
-  font-size: clamp(0.6rem, 0.8vw, 0.8rem);
+  font-size: clamp(0.6rem, 1vw, 1rem);
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;

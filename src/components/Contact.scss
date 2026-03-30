@@ -1,0 +1,319 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// UNICA'S CAFÉ — Contact Section (Layout E)
+// Cream · Great Vibes script title · conversational form · no boxes
+// ─────────────────────────────────────────────────────────────────────────────
+
+$cream: #e6dfd4;
+$cream-lt: #f0ebe3;
+$brown: #9d6b53;
+$ink: #0a0908;
+$ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
+
+// ── Shell ─────────────────────────────────────────────────────────────────────
+.contact {
+  width: 100vw;
+  background: $cream;
+  position: relative;
+}
+
+.contact-wrapper,
+.contact-texture {
+  display: none; // remove old texture wrapper
+}
+
+// ── Container ─────────────────────────────────────────────────────────────────
+.contact-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: clamp(4rem, 8vh, 7rem) clamp(1.5rem, 5vw, 4rem);
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.contact-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  border-bottom: 1px solid rgba($brown, 0.12);
+  padding-bottom: 1.5rem;
+}
+
+.contact-eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(0.6rem, 0.7vw, 0.68rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba($brown, 0.55);
+  margin-bottom: 1rem;
+}
+
+.contact-title {
+  font-family: var(--font-script);
+  font-size: clamp(3.5rem, 8vw, 5rem);
+  color: rgba($ink, 0.85);
+  line-height: 1;
+  font-weight: 400;
+}
+
+.contact-note {
+  font-family: var(--font-body);
+  font-size: clamp(0.6rem, 0.7vw, 0.68rem);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba($ink, 0.22);
+}
+
+// ── Status message — no box, just text ───────────────────────────────────────
+.status-message {
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 0.85vw, 0.8rem);
+  letter-spacing: 0.06em;
+  margin-bottom: 1.5rem;
+
+  &.success {
+    color: #4caf82;
+  }
+  &.error {
+    color: #c0392b;
+  }
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+.contact-form {
+  width: 100%;
+}
+
+// ── Sentence paragraph ────────────────────────────────────────────────────────
+.form-sentence {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  color: rgba($ink, 1);
+  line-height: 2.5;
+}
+
+.sentence-text {
+  color: rgba($ink, 0.8);
+}
+
+.sentence-block {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+// ── Inline inputs ─────────────────────────────────────────────────────────────
+.sentence-field {
+  display: inline;
+}
+
+.inline-input {
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba($brown, 0.35);
+  color: rgba($brown, 0.88);
+  font-family: var(--font-display);
+  font-size: inherit;
+  font-style: italic;
+  font-weight: 400;
+  padding: 0 0.25em 0.1em;
+  outline: none;
+  min-width: 8ch;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: rgba($brown, 0.3);
+    font-style: italic;
+  }
+
+  &:focus {
+    border-bottom-color: rgba($brown, 0.7);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+// ── Textarea ──────────────────────────────────────────────────────────────────
+.inline-textarea {
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba($brown, 0.35);
+  color: rgba($brown, 0.88);
+  font-family: var(--font-display);
+  font-size: inherit;
+  font-style: italic;
+  font-weight: 400;
+  padding: 0.1em 0.25em;
+  outline: none;
+  width: 100%;
+  resize: none;
+  display: block;
+  overflow: hidden;
+  line-height: 1.8;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: rgba($brown, 0.3);
+    font-style: italic;
+  }
+
+  &:focus {
+    border-bottom-color: rgba($brown, 0.7);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+// ── Bottom row ────────────────────────────────────────────────────────────────
+.form-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: clamp(2.5rem, 5vh, 4rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba($brown, 0.4);
+}
+
+// ── Info links — plain text, no underline box ─────────────────────────────────
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.info-item {
+  font-family: var(--font-body);
+  font-size: clamp(0.6rem, 0.72vw, 0.68rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba($ink, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: rgba($ink, 0.5);
+  }
+}
+
+// ── Submit — italic display text, no button box ───────────────────────────────
+.submit-btn {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 2rem);
+  font-weight: 400;
+  color: rgba($brown, 1);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+  letter-spacing: 0.01em;
+
+  &::after {
+    content: " →";
+    font-style: normal;
+    font-size: 0.85em;
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.3s $ease-main;
+    display: inline-block;
+    transform: translateX(-4px);
+  }
+
+  &:hover {
+    color: rgba($brown, 0.9);
+
+    &::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  &.submitting {
+    color: rgba($brown, 0.35);
+    cursor: not-allowed;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+.contact-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(2rem, 4vh, 3rem);
+  padding-top: 1rem;
+  border-top: 1px solid rgba($brown, 0.5);
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: rgba($brown, 1);
+}
+
+.footer-copy {
+  font-family: var(--font-body);
+  font-size: clamp(0.58rem, 0.68vw, 0.65rem);
+  letter-spacing: 0.1em;
+  color: rgba($ink, 0.9);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.social-link {
+  font-family: var(--font-body);
+  font-size: clamp(0.58rem, 0.68vw, 0.65rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba($ink, 1);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: rgba($brown, 0.7);
+  }
+}
+
+// ── Mobile ────────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .form-bottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .submit-btn {
+    padding-left: 0.5rem;
+  }
+
+  .contact-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .contact-eyebrow {
+    text-align: center;
+  }
+}
