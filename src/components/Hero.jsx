@@ -1,10 +1,46 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./Hero.scss";
 import heroBg from "../assets/heroBg.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// ── Open/Closed badge — checks Philippine time (UTC+8), open 11AM–7PM ─────────
+const OpenBadge = () => {
+  const getStatus = () => {
+    const now = new Date();
+    const ph = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Manila" }),
+    );
+    const hour = ph.getHours();
+    const min = ph.getMinutes();
+    const isOpen = hour >= 11 && (hour < 19 || (hour === 19 && min === 0));
+    const fmt = (h, m) => {
+      const period = h >= 12 ? "PM" : "AM";
+      const h12 = h % 12 || 12;
+      return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+    };
+    return { isOpen, time: fmt(ph.getHours(), ph.getMinutes()) };
+  };
+
+  const [status, setStatus] = useState(getStatus);
+
+  useEffect(() => {
+    const id = setInterval(() => setStatus(getStatus()), 60000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className={`open-badge ${status.isOpen ? "is-open" : "is-closed"}`}>
+      <span className="badge-dot" />
+      <span className="badge-text">
+        {status.isOpen ? `Open now · Closes 7PM` : `Closed · Opens 11AM`}
+      </span>
+      <span className="badge-time">{status.time}</span>
+    </div>
+  );
+};
 
 const Hero = () => {
   const titleRef = useRef(null);
@@ -90,22 +126,11 @@ const Hero = () => {
           <em>Cafe</em>
         </h1>
 
-        {/* ── CTA ── */}
+        {/* ── Open now badge ── */}
+        <OpenBadge />
         <div className="hero-cta" ref={ctaRef}>
           <a href="#menu" className="cta-btn">
-            <span>Explore Menu</span>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path
-                d="M5 12h14M13 6l6 6-6 6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            Explore Menu
           </a>
           <a href="#about" className="cta-link">
             Our Story
