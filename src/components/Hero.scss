@@ -211,7 +211,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
     }
   }
 
-  @media (min-width: 1920px) and (max-width: 2400px) {
+  @media (min-width: 1921px) and (max-width: 2560px) {
     font-size: clamp(3rem, 28vw, 28rem);
   }
   @media (min-width: 1280px) and (max-width: 1439px) {
