@@ -14,105 +14,74 @@ const useHeroAnimation = () => {
   const ctaRef = useRef(null);
 
   useEffect(() => {
-    // Guard — if any ref didn't mount, bail
-    const els = [overlayRef, metaRef, subtitleRef, titleRef, badgeRef, ctaRef];
-    if (els.some((r) => !r.current)) return;
-
     const ctx = gsap.context(() => {
-      // ── Set initial states instantly via gsap.set ─────────────────────────
-      // Avoids FOUC (flash of unstyled content) by hiding before first paint
-      gsap.set(
-        [
-          metaRef.current,
-          subtitleRef.current,
-          titleRef.current,
-          badgeRef.current,
-          ctaRef.current,
-        ],
-        { autoAlpha: 0 },
-      );
-
-      // ── Single timeline — one RAF loop instead of 6 separate tweens ───────
-      const tl = gsap.timeline({ delay: 0.1 });
-
-      tl.to(overlayRef.current, {
-        opacity: 1,
+      // ── Overlay — slow fade in ─────────────────────────────────────────────
+      gsap.from(overlayRef.current, {
+        opacity: 0,
         duration: 1.8,
         ease: "power2.inOut",
-      })
-        .to(
-          metaRef.current,
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 1,
-            ease: "power2.out",
-          },
-          0.6,
-        ) // absolute label — starts at t=0.6s
-        .to(
-          subtitleRef.current,
-          {
-            x: 0,
-            skewX: 0,
-            autoAlpha: 1,
-            duration: 0.9,
-            ease: "power3.out",
-          },
-          0.85,
-        )
-        .to(
-          titleRef.current,
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 1.4,
-            ease: "elastic.out(1, 0.6)",
-          },
-          0.5,
-        )
-        .to(
-          badgeRef.current,
-          {
-            x: 0,
-            scale: 1,
-            autoAlpha: 1,
-            duration: 0.7,
-            ease: "back.out(2)",
-          },
-          1.4,
-        )
-        .to(
-          ctaRef.current,
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 1,
-            ease: "power4.out",
-          },
-          1.6,
-        );
+      });
 
-      // ── Set FROM values before timeline runs (replaces gsap.from) ─────────
-      gsap.set(metaRef.current, { y: -18 });
-      gsap.set(subtitleRef.current, { x: -24, skewX: -4 });
-      gsap.set(titleRef.current, { y: 80 });
-      gsap.set(badgeRef.current, { x: -20, scale: 0.8 });
-      gsap.set(ctaRef.current, { y: 24 });
+      // ── Meta — drifts down from top ────────────────────────────────────────
+      gsap.from(metaRef.current, {
+        y: -18,
+        autoAlpha: 0,
+        duration: 1,
+        delay: 0.6,
+        ease: "power2.out",
+      });
 
-      // ── Video parallax — will-change set in SCSS ───────────────────────────
-      if (videoRef.current) {
-        ScrollTrigger.create({
+      // ── Subtitle — slides from left with skew snap ─────────────────────────
+      gsap.from(subtitleRef.current, {
+        x: -24,
+        skewX: -4,
+        autoAlpha: 0,
+        duration: 0.9,
+        delay: 0.85,
+        ease: "power3.out",
+        onComplete: () =>
+          gsap.to(subtitleRef.current, { skewX: 0, duration: 0.3 }),
+      });
+
+      // ── Title — elastic rise ───────────────────────────────────────────────
+      gsap.from(titleRef.current, {
+        y: 80,
+        autoAlpha: 0,
+        duration: 1.4,
+        delay: 0.5,
+        ease: "elastic.out(1, 0.6)",
+      });
+
+      // ── Badge — pops in from left with back bounce ─────────────────────────
+      gsap.from(badgeRef.current, {
+        x: -20,
+        scale: 0.8,
+        autoAlpha: 0,
+        duration: 0.7,
+        delay: 1.4,
+        ease: "back.out(2)",
+      });
+
+      // ── CTA — floats up softly, last ──────────────────────────────────────
+      gsap.from(ctaRef.current, {
+        y: 24,
+        autoAlpha: 0,
+        duration: 1,
+        delay: 1.6,
+        ease: "power4.out",
+      });
+
+      // ── Video parallax on scroll ───────────────────────────────────────────
+      gsap.to(videoRef.current, {
+        yPercent: 20,
+        ease: "none",
+        scrollTrigger: {
           trigger: ".hero",
           start: "top top",
           end: "bottom top",
-          scrub: 1, // smoothed scrub, less jank
-          animation: gsap.to(videoRef.current, {
-            yPercent: 20,
-            ease: "none",
-          }),
-        });
-      }
+          scrub: true,
+        },
+      });
     });
 
     return () => ctx.revert();

@@ -1,30 +1,31 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import useHeroAnimation from "../hooks/useHeroAnimation.js";
 import "./Hero.scss";
 import heroBg from "../assets/heroBg.webm";
 
-// Defined outside component — stable reference, never re-created
-const getStatus = () => {
-  const now = new Date();
-  const ph = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Manila" }));
-  const hour = ph.getHours();
-  const min = ph.getMinutes();
-  const isOpen = hour >= 11 && (hour < 19 || (hour === 19 && min === 0));
-  const fmt = (h, m) => {
-    const period = h >= 12 ? "PM" : "AM";
-    const h12 = h % 12 || 12;
-    return `${h12}:${String(m).padStart(2, "0")} ${period}`;
-  };
-  return { isOpen, time: fmt(hour, min) };
-};
-
 const OpenBadge = ({ badgeRef }) => {
+  const getStatus = () => {
+    const now = new Date();
+    const ph = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Manila" }),
+    );
+    const hour = ph.getHours();
+    const min = ph.getMinutes();
+    const isOpen = hour >= 11 && (hour < 19 || (hour === 19 && min === 0));
+    const fmt = (h, m) => {
+      const period = h >= 12 ? "PM" : "AM";
+      const h12 = h % 12 || 12;
+      return `${h12}:${String(m).padStart(2, "0")} ${period}`;
+    };
+    return { isOpen, time: fmt(ph.getHours(), ph.getMinutes()) };
+  };
+
   const [status, setStatus] = useState(getStatus);
 
   useEffect(() => {
-    const id = setInterval(() => setStatus(getStatus()), 60_000);
+    const id = setInterval(() => setStatus(getStatus()), 60000);
     return () => clearInterval(id);
-  }, []); // no deps — getStatus is stable (defined outside)
+  }, []);
 
   return (
     <div
@@ -33,7 +34,7 @@ const OpenBadge = ({ badgeRef }) => {
     >
       <span className="badge-dot" />
       <span className="badge-text">
-        {status.isOpen ? "Open now · Closes 7PM" : "Closed · Opens 11AM"}
+        {status.isOpen ? `Open now · Closes 7PM` : `Closed · Opens 11AM`}
       </span>
       <span className="badge-time">{status.time}</span>
     </div>
@@ -61,10 +62,6 @@ const Hero = () => {
           playsInline
           className="hero-video"
           ref={videoRef}
-          poster="/assets/heroPoster.webp"
-          // Hint to browser this is low priority for interaction
-          tabIndex={-1}
-          aria-hidden="true"
         >
           <source src={heroBg} type="video/webm" />
         </video>
