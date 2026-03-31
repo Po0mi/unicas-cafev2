@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import useLocationAnimation from "../hooks/useLocationAnimation";
 import "./Location.scss";
+
+// ── Leaflet loaded lazily — not imported at the top level ─────────────────────
+// This keeps it out of the initial bundle entirely.
+// It only downloads when Location mounts (which is lazy in App.jsx)
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,47 +23,64 @@ const Location = () => {
 
   useLocationAnimation(sectionRef, leftRef, rightRef);
 
-  // ── Leaflet init ───────────────────────────────────────────────────────────
+  // ── Leaflet init — dynamic import ─────────────────────────────────────────
   useEffect(() => {
     if (leafletRef.current) return;
 
-    const map = L.map(mapRef.current, {
-      center: [LAT, LNG],
-      zoom: 17,
-      zoomControl: false,
-      scrollWheelZoom: false,
-      attributionControl: false,
-    });
+    let map;
 
-    leafletRef.current = map;
+    const initMap = async () => {
+      // Both the library and its CSS load only when this runs
+      const [L] = await Promise.all([
+        import("leaflet"),
+        import("leaflet/dist/leaflet.css"),
+      ]);
 
-    L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-      { maxZoom: 19 },
-    ).addTo(map);
+      if (!mapRef.current || leafletRef.current) return;
 
-    const markerIcon = L.divIcon({
-      className: "",
-      html: `
-        <div class="map-marker">
-          <div class="map-marker-dot"></div>
-          <div class="map-marker-ring"></div>
-        </div>
-      `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-    });
+      map = L.default.map(mapRef.current, {
+        center: [LAT, LNG],
+        zoom: 17,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false,
+      });
 
-    L.marker([LAT, LNG], { icon: markerIcon })
-      .addTo(map)
-      .bindPopup(
-        `<div class="map-popup">
-          <strong>Unica's Cafe</strong>
-          <span>Aragon St, Cabatuan, Iloilo</span>
-        </div>`,
-        { closeButton: false, offset: [0, -8] },
-      )
-      .openPopup();
+      leafletRef.current = map;
+
+      L.default
+        .tileLayer(
+          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+          { maxZoom: 19 },
+        )
+        .addTo(map);
+
+      const markerIcon = L.default.divIcon({
+        className: "",
+        html: `
+          <div class="map-marker">
+            <div class="map-marker-dot"></div>
+            <div class="map-marker-ring"></div>
+          </div>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+      });
+
+      L.default
+        .marker([LAT, LNG], { icon: markerIcon })
+        .addTo(map)
+        .bindPopup(
+          `<div class="map-popup">
+            <strong>Unica's Cafe</strong>
+            <span>Aragon St, Cabatuan, Iloilo</span>
+          </div>`,
+          { closeButton: false, offset: [0, -8] },
+        )
+        .openPopup();
+    };
+
+    initMap();
 
     return () => {
       if (leafletRef.current) {
@@ -82,7 +101,12 @@ const Location = () => {
       </div>
 
       {/* ── Center — map ── */}
-      <div className="location-map" ref={mapRef} />
+      <div
+        className="location-map"
+        ref={mapRef}
+        // Explicit dimensions fix the Lighthouse warning too
+        style={{ width: "100%", minHeight: "clamp(380px, 50vh, 520px)" }}
+      />
 
       {/* ── Right — details ── */}
       <div className="location-right" ref={rightRef}>
