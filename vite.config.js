@@ -6,21 +6,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Core React — loads first
-          "vendor-react": ["react", "react-dom"],
-          // GSAP — large, split out so it loads in parallel
-          "vendor-gsap": ["gsap"],
-          // Leaflet — only needed for Location section
-          "vendor-leaflet": ["leaflet"],
-          // EmailJS — only needed for Contact section
-          "vendor-emailjs": ["@emailjs/browser"],
-          // Lenis — small but separate so it doesn't block React
-          "vendor-lenis": ["lenis"],
+        manualChunks: (id) => {
+          if (id.includes("node_modules")) {
+            if (id.includes("react-dom") || id.includes("react/"))
+              return "vendor-react";
+            if (id.includes("gsap")) return "vendor-gsap";
+            if (id.includes("leaflet")) return "vendor-leaflet";
+            if (id.includes("@emailjs")) return "vendor-emailjs";
+            if (id.includes("lenis")) return "vendor-lenis";
+          }
         },
       },
     },
-    // Raise chunk size warning limit — GSAP + Leaflet are naturally large
     chunkSizeWarningLimit: 600,
   },
 });
