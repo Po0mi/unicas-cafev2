@@ -7,7 +7,7 @@ import { useClickOutside } from "../hooks/useClickOutside";
 import { useScrollPosition } from "../hooks/useScrollPosition";
 import { useActiveSection } from "../hooks/useActiveSection";
 import useNavbarAnimation from "../hooks/useNavbarAnimation";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 import "./navbar.scss";
 
 gsap.registerPlugin(CustomEase, ScrollToPlugin);
@@ -24,13 +24,27 @@ const Navbar = () => {
   } = useToggle();
   const menuRef = useClickOutside(closeMenu);
 
-  const sections = ["home", "about", "menu", "gallery", "contact"];
+  const sections = ["home", "about", "menu", "gallery", "map", "contact"];
   const activeSection = useActiveSection(sections);
 
   // Refs for GSAP
   const dropdownRef = useRef(null);
   const menuLinksRef = useRef([]);
   const hamburgerSpansRef = useRef([]);
+
+  // ── Cache navbar height once on mount — fixes forced reflow ───────────────
+  const navbarHeightRef = useRef(0);
+  useEffect(() => {
+    const navbar = document.querySelector(".navbar");
+    if (navbar) navbarHeightRef.current = navbar.offsetHeight;
+
+    // Update on resize in case navbar height changes
+    const onResize = () => {
+      if (navbar) navbarHeightRef.current = navbar.offsetHeight;
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   // Mobile detection
   useEffect(() => {
@@ -68,7 +82,6 @@ const Navbar = () => {
           delay: 0.1,
         },
       );
-      // Animate to X
       gsap.to(hamburgerSpansRef.current[0], {
         rotate: 45,
         y: 9,
@@ -90,7 +103,6 @@ const Navbar = () => {
         ease: "main",
         onComplete: () => gsap.set(dropdownRef.current, { display: "none" }),
       });
-      // Reset to hamburger
       gsap.to(hamburgerSpansRef.current[0], {
         rotate: 0,
         y: 0,
@@ -112,21 +124,21 @@ const Navbar = () => {
     { href: "#about", label: "About", id: "about" },
     { href: "#menu", label: "Menu", id: "menu" },
     { href: "#gallery", label: "Gallery", id: "gallery" },
+    { href: "#map", label: "Map", id: "map" },
     { href: "#contact", label: "Contact", id: "contact" },
   ];
 
-  // ── GSAP smooth scroll ──
-  // ScrollToPlugin handles the eased scroll,
-  // offset accounts for the fixed navbar height
+  // ── Smooth scroll — uses cached height, no DOM query on click ─────────────
   const handleSmoothScroll = (e, href) => {
     e.preventDefault();
 
     const target = document.querySelector(href);
     if (!target) return;
 
-    const navbarHeight = document.querySelector(".navbar")?.offsetHeight ?? 0;
     const targetY =
-      target.getBoundingClientRect().top + window.scrollY - navbarHeight;
+      target.getBoundingClientRect().top +
+      window.scrollY -
+      navbarHeightRef.current;
 
     gsap.to(window, {
       scrollTo: { y: targetY, autoKill: false },

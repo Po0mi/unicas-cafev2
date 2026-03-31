@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useHeroAnimation from "../hooks/useHeroAnimation.js";
 import "./Hero.scss";
-import heroBg from "../assets/heroBg.mp4";
+import heroBg from "../assets/heroBg.webm";
 
 const OpenBadge = ({ badgeRef }) => {
   const getStatus = () => {
@@ -63,7 +63,7 @@ const Hero = () => {
           className="hero-video"
           ref={videoRef}
         >
-          <source src={heroBg} type="video/mp4" />
+          <source src={heroBg} type="video/webm" />
         </video>
 
         <div className="hero-overlay" ref={overlayRef} />

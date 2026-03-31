@@ -1,7 +1,17 @@
+import { useRef } from "react";
 import emailjs from "@emailjs/browser";
+import useContactAnimation from "../hooks/useContactAnimation";
 import "./Contact.scss";
 
 const Contact = () => {
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const formRef = useRef(null);
+  const bottomRef = useRef(null);
+  const footerRef = useRef(null);
+
+  useContactAnimation(sectionRef, headerRef, formRef, bottomRef, footerRef);
+
   // Format current time for the email template
   const getCurrentTime = () => {
     const now = new Date();
@@ -18,20 +28,17 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Get form data directly from form elements
     const form = e.target;
     const name = form.name.value;
     const intent = form.intent.value;
     const message = form.message.value;
     const email = form.email.value;
 
-    // Basic validation
     if (!name || !intent || !message || !email) {
       alert("Please fill in all fields");
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("Please enter a valid email address");
@@ -39,7 +46,6 @@ const Contact = () => {
     }
 
     try {
-      // Prepare template parameters matching your custom template
       const templateParams = {
         name: name,
         email: email,
@@ -52,7 +58,6 @@ const Contact = () => {
 
       console.log("Sending with params:", templateParams);
 
-      // Using your provided credentials
       const result = await emailjs.send(
         "service_yzkgjhm",
         "template_ba6ei21",
@@ -63,7 +68,6 @@ const Contact = () => {
       console.log("Email sent successfully:", result.text);
       alert("Message sent successfully! We'll get back to you soon.");
 
-      // Clear form
       form.reset();
     } catch (error) {
       console.error("Email sending failed:", error);
@@ -73,15 +77,16 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact" id="contact">
+    <section className="contact" id="contact" ref={sectionRef}>
       {/* Texture overlay — matches hero-wrapper / about-wrapper */}
+
       <div className="contact-wrapper">
         <div className="contact-texture" />
       </div>
 
       <div className="contact-container">
         {/* Header */}
-        <div className="contact-header">
+        <div className="contact-header" ref={headerRef}>
           <div>
             <p className="contact-eyebrow">Get in touch</p>
             <h2 className="contact-title">Say hello.</h2>
@@ -90,7 +95,7 @@ const Contact = () => {
         </div>
 
         {/* Conversational form */}
-        <form className="contact-form" onSubmit={handleSubmit}>
+        <form className="contact-form" onSubmit={handleSubmit} ref={formRef}>
           <p className="form-sentence">
             {/* Line 1: name + intent */}
             <span className="sentence-text">Hi, my name is </span>
@@ -146,7 +151,7 @@ const Contact = () => {
           </p>
 
           {/* Bottom row */}
-          <div className="form-bottom">
+          <div className="form-bottom" ref={bottomRef}>
             <div className="contact-info">
               <a className="info-item" href="#">
                 Cabatuan, Iloilo, Philippines
@@ -165,8 +170,10 @@ const Contact = () => {
         </form>
 
         {/* Footer */}
-        <div className="contact-footer">
-          <span className="footer-brand">Unica's Cafe</span>
+        <div className="contact-footer" ref={footerRef}>
+          <span className="footer-brand">
+            Unica's <em>Cafe.</em>
+          </span>
           <span className="footer-copy">© 2026 · Created by Dan</span>
           <div className="footer-socials">
             <a

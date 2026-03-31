@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useMenuAnimation from "../hooks/useMenuAnimation";
 import "./Menu.scss";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,14 +26,6 @@ const CATEGORIES = [
       { name: "Salted Caramel", price: "₱105 / ₱150" },
       { name: "Vanilla Latte", price: "₱105 / ₱150" },
       { name: "Biscoff Latte", price: "₱125 / ₱175" },
-    ],
-    addons: [
-      { name: "Oat Milk", price: "₱30" },
-      { name: "Espresso Shot", price: "₱35" },
-      { name: "Syrup", price: "₱20" },
-      { name: "Sauce", price: "₱25" },
-      { name: "Condensed Milk", price: "₱20" },
-      { name: "Whipped Cream", price: "₱30" },
     ],
   },
   {
@@ -93,12 +86,6 @@ const CATEGORIES = [
       { name: "Bacon", price: "₱178" },
       { name: "Bangus", price: "₱175" },
       { name: "Chicken Nuggets", price: "₱125" },
-    ],
-    addons: [
-      { name: "Plain Rice", price: "₱15" },
-      { name: "Garlic Rice", price: "₱35" },
-      { name: "Java Rice", price: "₱30" },
-      { name: "Egg", price: "₱15" },
     ],
   },
   {
@@ -173,6 +160,34 @@ const CATEGORIES = [
       { name: "Chicken Nuggets w/ Fries", price: "₱140" },
     ],
   },
+  {
+    id: "addons",
+    num: "09",
+    label: "Add Ons",
+    count: 10,
+    sections: [
+      {
+        label: "Drinks",
+        items: [
+          { name: "Oat Milk", price: "₱30" },
+          { name: "Espresso Shot", price: "₱35" },
+          { name: "Syrup", price: "₱20" },
+          { name: "Sauce", price: "₱25" },
+          { name: "Condensed Milk", price: "₱20" },
+          { name: "Whipped Cream", price: "₱30" },
+        ],
+      },
+      {
+        label: "Rice Meals",
+        items: [
+          { name: "Plain Rice", price: "₱15" },
+          { name: "Garlic Rice", price: "₱35" },
+          { name: "Java Rice", price: "₱30" },
+          { name: "Egg", price: "₱15" },
+        ],
+      },
+    ],
+  },
 ];
 
 const AccordionItem = ({ cat, isOpen, onToggle }) => {
@@ -236,48 +251,36 @@ const AccordionItem = ({ cat, isOpen, onToggle }) => {
               </div>
             ))
           : renderItems(cat.items)}
-        {cat.addons && (
-          <div className="accord-section">
-            <span className="accord-section-label">Add Ons</span>
-            {renderItems(cat.addons)}
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
 const Menu = () => {
-  const [openId, setOpenId] = useState("espresso");
+  // null on mount — first accordion opens when section scrolls into view
+  const [openId, setOpenId] = useState(null);
   const sectionRef = useRef(null);
   const headRef = useRef(null);
   const listRef = useRef(null);
 
-  const toggle = (id) => setOpenId((prev) => (prev === id ? null : id));
+  useMenuAnimation(sectionRef, headRef);
 
+  // Open espresso when section enters viewport
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          once: true,
-        },
-        defaults: { ease: "power3.out" },
-      });
-      tl.from(headRef.current, { y: 24, autoAlpha: 0, duration: 0.7 }).from(
-        ".accord-cat",
-        { y: 16, autoAlpha: 0, stagger: 0.07, duration: 0.5 },
-        "-=0.3",
-      );
+    const trigger = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 60%",
+      once: true,
+      onEnter: () => setOpenId("espresso"),
     });
-    return () => ctx.revert();
+    return () => trigger.kill();
   }, []);
+
+  const toggle = (id) => setOpenId((prev) => (prev === id ? null : id));
 
   return (
     <section className="menu-section" id="menu" ref={sectionRef}>
       <div className="menu-inner">
-        {/* ── Header ── */}
         <div className="menu-head" ref={headRef}>
           <span className="menu-tag">What we serve · Est. 2026</span>
           <h2 className="menu-title">
@@ -286,7 +289,6 @@ const Menu = () => {
           <p className="menu-sub">Crafted with care, served with warmth.</p>
         </div>
 
-        {/* ── Accordion ── */}
         <div className="menu-accord" ref={listRef}>
           {CATEGORIES.map((cat) => (
             <AccordionItem

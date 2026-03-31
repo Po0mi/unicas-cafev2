@@ -1,14 +1,15 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useGalleryAnimation from "../hooks/useGalleryAnimation";
 import "./Gallery.scss";
 
-import nightExterior from "../assets/nightExterior.jpg";
-import exterior from "../assets/exterior.jpg";
-import cornerInterior from "../assets/cornerInterior.jpg";
-import handDrink from "../assets/handDrink.jpg";
-import meal from "../assets/meal.jpg";
-import cookies from "../assets/cookies.jpg";
+import nightExterior from "../assets/nightExterior.webp";
+import exterior from "../assets/exterior.webp";
+import cornerInterior from "../assets/cornerInterior.webp";
+import handDrink from "../assets/handDrink.webp";
+import meal from "../assets/meal.webp";
+import cookies from "../assets/cookies.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,35 +36,12 @@ const Gallery = () => {
   const mousePos = useRef({ x: 0, y: 0 });
   const rafRef = useRef(null);
 
-  // ── Entrance animation ──────────────────────────────────────────────────────
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(headRef.current, {
-        y: 20,
-        autoAlpha: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          once: true,
-        },
-      });
-      gsap.from(cellsRef.current, {
-        y: 24,
-        autoAlpha: 0,
-        duration: 0.7,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          once: true,
-        },
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+  const { showPreview, hidePreview } = useGalleryAnimation(
+    sectionRef,
+    headRef,
+    cellsRef,
+    previewRef,
+  );
 
   // ── Smooth cursor-following with GSAP ──────────────────────────────────────
   useEffect(() => {
@@ -83,36 +61,21 @@ const Gallery = () => {
   }, []);
 
   // ── Show / hide preview ────────────────────────────────────────────────────
-  const handleEnter = useCallback((item) => {
-    setHoveredImg(item);
-    if (previewRef.current) {
-      gsap.killTweensOf(previewRef.current);
-      gsap.fromTo(
-        previewRef.current,
-        { scale: 0.85, autoAlpha: 0, rotate: -3 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          rotate: 0,
-          duration: 0.45,
-          ease: "power3.out",
-        },
-      );
-    }
-  }, []);
+  const handleEnter = useCallback(
+    (item) => {
+      setHoveredImg(item);
+      if (previewRef.current) {
+        showPreview();
+      }
+    },
+    [showPreview],
+  );
 
   const handleLeave = useCallback(() => {
     if (previewRef.current) {
-      gsap.to(previewRef.current, {
-        scale: 0.85,
-        autoAlpha: 0,
-        rotate: 3,
-        duration: 0.3,
-        ease: "power2.in",
-        onComplete: () => setHoveredImg(null),
-      });
+      hidePreview(() => setHoveredImg(null));
     }
-  }, []);
+  }, [hidePreview]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import coffeeImage from "../assets/Coffee.png";
+import coffeeImage from "../assets/Coffee.webp";
 import "./About.scss";
 import useAboutAnimation from "../hooks/useAboutAnimation";
 

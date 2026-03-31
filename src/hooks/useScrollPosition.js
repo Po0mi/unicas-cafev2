@@ -9,31 +9,36 @@ import { useState, useEffect } from "react";
  * - Show "Back to Top" button after scrolling
  * - Trigger animations when user scrolls
  *
+ * OPTIMIZED:
+ * - passive: true  → browser doesn't wait for JS before scrolling
+ * - rAF throttle  → only reads layout once per animation frame, not on every scroll event
+ *
  * @returns {number} - Current scroll position in pixels (0 = top, 100 = 100px down)
  */
 export const useScrollPosition = () => {
-  // State: remembers how far we've scrolled (in pixels)
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    /**
-     * Update function: gets current scroll position
-     */
-    const updatePosition = () => {
-      // pageYOffset = how many pixels from top we've scrolled
-      setScrollPosition(window.pageYOffset);
+    let rafId = null;
+
+    const onScroll = () => {
+      if (rafId) return; // already queued — skip
+      rafId = requestAnimationFrame(() => {
+        setScrollPosition(window.scrollY);
+        rafId = null;
+      });
     };
 
-    // Listen for scroll events
-    window.addEventListener("scroll", updatePosition);
+    window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Get initial position (in case page starts scrolled)
-    updatePosition();
+    // Get initial position
+    setScrollPosition(window.scrollY);
 
-    // Cleanup: stop listening when component is removed
-    return () => window.removeEventListener("scroll", updatePosition);
-  }, []); // Empty array = run once when component loads
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
-  // Give back the current scroll position
   return scrollPosition;
 };
