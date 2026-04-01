@@ -213,10 +213,11 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 
 @media (max-width: 480px) {
   .navbar-container {
-    padding: 1rem;
+    padding: 0rem;
   }
   .navbar-logo img {
-    height: 90px;
+    height: 80px;
+    width: 80px;
   }
 }
 
