@@ -24,7 +24,7 @@ const Navbar = () => {
   } = useToggle();
   const menuRef = useClickOutside(closeMenu);
 
-  const sections = ["home", "about", "menu", "gallery", "map", "contact"];
+  const sections = ["home", "about", "menu", "gallery", "location", "contact"];
   const activeSection = useActiveSection(sections);
 
   // Refs for GSAP
