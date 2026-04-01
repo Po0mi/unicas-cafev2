@@ -79,7 +79,7 @@ const Hero = () => {
         </p>
 
         <h1 className="hero-title" ref={titleRef}>
-          Unicas <br className="title-break" />
+          Unica's <br className="title-break" />
           <em>Cafe</em>
         </h1>
 
