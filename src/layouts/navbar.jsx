@@ -124,7 +124,7 @@ const Navbar = () => {
     { href: "#about", label: "About", id: "about" },
     { href: "#menu", label: "Menu", id: "menu" },
     { href: "#gallery", label: "Gallery", id: "gallery" },
-    { href: "#map", label: "Map", id: "location" },
+    { href: "#location", label: "Location", id: "location" },
     { href: "#contact", label: "Contact", id: "contact" },
   ];
 
