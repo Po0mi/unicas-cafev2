@@ -29,12 +29,15 @@ const ITEMS = [
 
 const Gallery = () => {
   const [hoveredImg, setHoveredImg] = useState(null);
+  const [modalImg, setModalImg] = useState(null); // ← modal state
+  const [isMobile, setIsMobile] = useState(false);
+
   const sectionRef = useRef(null);
   const headRef = useRef(null);
   const cellsRef = useRef([]);
   const previewRef = useRef(null);
   const mousePos = useRef({ x: 0, y: 0 });
-  const rafRef = useRef(null);
+  const modalRef = useRef(null);
 
   const { showPreview, hidePreview } = useGalleryAnimation(
     sectionRef,
@@ -43,8 +46,49 @@ const Gallery = () => {
     previewRef,
   );
 
-  // ── Smooth cursor-following with GSAP ──────────────────────────────────────
+  // ── Detect mobile ──────────────────────────────────────────────────────────
   useEffect(() => {
+    const mq = window.matchMedia("(hover: none)");
+    setIsMobile(mq.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // ── Lock scroll when modal open ────────────────────────────────────────────
+  useEffect(() => {
+    document.body.style.overflow = modalImg ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [modalImg]);
+
+  // ── Animate modal in/out ───────────────────────────────────────────────────
+  useEffect(() => {
+    if (!modalRef.current) return;
+    if (modalImg) {
+      gsap.fromTo(
+        modalRef.current,
+        { opacity: 0, scale: 0.96 },
+        { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" },
+      );
+    }
+  }, [modalImg]);
+
+  const closeModal = useCallback(() => {
+    if (!modalRef.current) return;
+    gsap.to(modalRef.current, {
+      opacity: 0,
+      scale: 0.96,
+      duration: 0.25,
+      ease: "power2.in",
+      onComplete: () => setModalImg(null),
+    });
+  }, []);
+
+  // ── Smooth cursor-following ────────────────────────────────────────────────
+  useEffect(() => {
+    if (isMobile) return;
     const onMove = (e) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
       if (previewRef.current) {
@@ -58,24 +102,30 @@ const Gallery = () => {
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  }, [isMobile]);
 
-  // ── Show / hide preview ────────────────────────────────────────────────────
+  // ── Cell interactions ──────────────────────────────────────────────────────
   const handleEnter = useCallback(
     (item) => {
+      if (isMobile) return;
       setHoveredImg(item);
-      if (previewRef.current) {
-        showPreview();
-      }
+      if (previewRef.current) showPreview();
     },
-    [showPreview],
+    [isMobile, showPreview],
   );
 
   const handleLeave = useCallback(() => {
-    if (previewRef.current) {
-      hidePreview(() => setHoveredImg(null));
-    }
-  }, [hidePreview]);
+    if (isMobile) return;
+    if (previewRef.current) hidePreview(() => setHoveredImg(null));
+  }, [isMobile, hidePreview]);
+
+  const handleClick = useCallback(
+    (item) => {
+      if (!isMobile) return;
+      setModalImg(item);
+    },
+    [isMobile],
+  );
 
   return (
     <>
@@ -98,6 +148,7 @@ const Gallery = () => {
                 ref={(el) => (cellsRef.current[i] = el)}
                 onMouseEnter={() => handleEnter(item)}
                 onMouseLeave={handleLeave}
+                onClick={() => handleClick(item)}
               >
                 <img
                   src={item.src}
@@ -107,7 +158,6 @@ const Gallery = () => {
                   loading="lazy"
                   decoding="async"
                 />
-                {/* Label bottom left */}
                 <div className="gallery-cell-label">
                   <span>{item.alt}</span>
                 </div>
@@ -117,7 +167,7 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* ── Cursor-following preview ── */}
+      {/* ── Cursor preview (desktop only) ── */}
       <div className="gallery-preview" ref={previewRef}>
         {hoveredImg && (
           <img
@@ -127,6 +177,34 @@ const Gallery = () => {
           />
         )}
       </div>
+
+      {/* ── Modal (mobile only) ── */}
+      {modalImg && (
+        <div className="gallery-modal" onClick={closeModal}>
+          <div
+            className="gallery-modal-inner"
+            ref={modalRef}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={modalImg.src}
+              alt={modalImg.alt}
+              className="gallery-modal-img"
+              style={{ objectPosition: modalImg.pos }}
+            />
+            <div className="gallery-modal-footer">
+              <span>{modalImg.alt}</span>
+              <button
+                className="gallery-modal-close"
+                onClick={closeModal}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

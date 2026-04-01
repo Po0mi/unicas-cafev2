@@ -182,3 +182,68 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   pointer-events: none;
   user-select: none;
 }
+// ── Modal (mobile) ────────────────────────────────────────────────────────────
+.gallery-modal {
+  display: none; // desktop: hidden
+
+  @media (hover: none) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba($ink, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 1.5rem;
+  }
+}
+
+.gallery-modal-inner {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: $cream;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-modal-img {
+  width: 100%;
+  aspect-ratio: 2/ 3;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: $cream;
+
+  span {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: rgba($ink, 0.7);
+  }
+}
+
+.gallery-modal-close {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: $ink;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  line-height: 1;
+
+  &:hover {
+    opacity: 1;
+  }
+}
