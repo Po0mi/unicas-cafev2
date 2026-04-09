@@ -159,7 +159,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 
 // ── Subtitle ──────────────────────────────────────────────────────────────────
 .hero-subtitle {
-  grid-area: 3 / 2 / 3 / 7;
+  grid-area: 2 / 2 / 3 / 7;
   font-family: var(--font-body);
   font-size: clamp(0.85rem, 1.1vw, 1.5rem);
   font-weight: 300;
@@ -167,7 +167,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   letter-spacing: 0.04em;
   line-height: 1.6;
   z-index: 2;
-  align-self: flex-start;
+  align-self: flex-end;
 
   @media (max-width: 768px) {
     grid-area: 2 / 1 / 3 / 8;
@@ -185,7 +185,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 .hero-title {
   grid-area: 3 / 1 / 4 / 8;
   font-family: var(--font-display);
-  font-size: clamp(3rem, 20vw, 20rem);
+  font-size: clamp(3rem, 20vw, 17rem);
   font-weight: 800;
   line-height: 0.88;
   color: $cream;
@@ -212,7 +212,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   }
 
   @media (min-width: 1921px) and (max-width: 2560px) {
-    font-size: clamp(3rem, 28vw, 28rem);
+    font-size: clamp(3rem, 28vw, 25rem);
   }
   @media (min-width: 1280px) and (max-width: 1440px) {
     font-size: clamp(3rem, 16.5vw, 16.5rem);
@@ -232,7 +232,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   flex-direction: column;
   gap: 0.5rem;
   z-index: 2;
-  padding-left: 8rem;
+  padding-left: 17rem;
 
   @media (max-width: 768px) {
     grid-area: 4 / 1 / 5 / 8;
@@ -245,6 +245,13 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
     justify-self: center;
     text-align: center;
   }
+  @media (min-width: 1280px) and (max-width: 1440px) {
+    padding: 0;
+    padding-left: 7rem;
+  }
+  @media (min-width: 1921px) and (max-width: 2560px) {
+    padding-left: 14rem;
+  }
 }
 
 // Primary — large italic display link
@@ -255,7 +262,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   text-decoration: none;
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(1.8rem, 5vw, 5rem);
+  font-size: clamp(1.8rem, 5vw, 7rem);
   font-weight: 800;
   line-height: 1;
   color: rgba($brown, 0.85);
@@ -284,25 +291,27 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   @media (max-width: 480px) {
     font-size: clamp(1.5rem, 8vw, 1rem);
   }
-  @media (min-width: 1280px) and (max-width: 1439px) {
-    font-size: clamp(1.8rem, 4vw, 4rem);
-  }
 }
 // Secondary — quiet spaced caps
 .cta-link {
   font-family: var(--font-body);
-  font-size: clamp(0.6rem, 1vw, 1rem);
+  font-size: clamp(0.6rem, 1vw, 1.5rem);
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba($cream, 0.8);
   text-decoration: none;
   transition: color 0.3s ease;
+  margin-top: 0rem;
+  align-self: flex-end;
+  margin-right: 4.5rem;
 
   &:hover {
     color: rgba($cream, 0.6);
   }
   @media (max-width: 480px) {
-    padding-right: 1rem;
+    margin: 0;
+    padding: 0;
+    align-self: center;
   }
 }
