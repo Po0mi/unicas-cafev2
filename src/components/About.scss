@@ -16,20 +16,6 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   overflow: hidden;
   background-color: $cream;
   border-bottom: 1px solid rgba($brown, 0.4);
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: clamp(400px, 55vw, 800px);
-    height: clamp(400px, 55vw, 800px);
-    border-radius: 50%;
-    border: 1px solid rgba($brown, 0.2);
-    pointer-events: none;
-    z-index: 1;
-  }
 }
 
 // ── Grid container ────────────────────────────────────────────────────────────
@@ -94,7 +80,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   flex-direction: column;
   gap: 0.4rem;
   z-index: 2;
-  max-width: 50ch;
+  max-width: 60ch;
 
   // left blocks — right-aligned text pointing toward center image
   &--left {
@@ -164,7 +150,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
   font-family: var(--font-body);
   font-size: clamp(0.6rem, 2vw, 4rem);
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0em;
   text-transform: uppercase;
   color: rgba($brown, 0.55);
 }
@@ -172,7 +158,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 .block-title {
   font-family: var(--font-display);
   font-size: clamp(0.9rem, 2vw, 1.6rem);
-  font-weight: 700;
+  font-weight: 400;
   color: $ink;
   line-height: 1.2;
 }
@@ -209,12 +195,12 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 // ── Center image ──────────────────────────────────────────────────────────────
 .about-image-wrapper {
   grid-column: 3;
-  grid-row: 3 / 5;
+  grid-row: 3 / 6;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 5;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 
   @media (max-width: 768px) {
     grid-column: 1 / -1;
@@ -224,7 +210,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 }
 
 .about-image {
-  width: clamp(200px, 30vw, 600px);
+  width: clamp(600px, 30vw, 600px);
   height: auto;
   object-fit: contain;
   filter: drop-shadow(-5px 15px 14px rgba(0, 0, 0, 0.3));
@@ -237,7 +223,7 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 // ── Bottom body text ──────────────────────────────────────────────────────────
 .about-body {
   grid-column: 2 / 5;
-  grid-row: 5;
+  grid-row: 6;
   text-align: center;
   padding-top: 2rem;
 
