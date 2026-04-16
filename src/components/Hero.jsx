@@ -89,9 +89,6 @@ const Hero = () => {
           <a href="#menu" className="cta-btn">
             Explore Menu
           </a>
-          <a href="#about" className="cta-link">
-            Our Story
-          </a>
         </div>
       </div>
     </section>

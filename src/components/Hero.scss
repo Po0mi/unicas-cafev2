@@ -292,26 +292,3 @@ $ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
     font-size: clamp(1.5rem, 8vw, 1rem);
   }
 }
-// Secondary — quiet spaced caps
-.cta-link {
-  font-family: var(--font-body);
-  font-size: clamp(0.6rem, 1vw, 1.5rem);
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba($cream, 0.8);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  margin-top: 0rem;
-  align-self: flex-end;
-  margin-right: 4.5rem;
-
-  &:hover {
-    color: rgba($cream, 0.6);
-  }
-  @media (max-width: 480px) {
-    margin: 0;
-    padding: 0;
-    align-self: center;
-  }
-}
